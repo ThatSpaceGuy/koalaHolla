@@ -24,3 +24,19 @@ They have also provided their logo and the source code from when Lou (a KH emplo
 Delivery
 --------
 Upon completion of the project you'll need to provide not only the source (via github url), but also instructions on how the database and its table(s) should be set up. This can be in a simple databaseSetup.txt file in the repo.
+
+Versioning Plan
+---------------
+SQL file - with statements to setup database
+Build database
+button functions working
+Add button
+DisplayKoalas - a Koala Object and adds to DOM
+Edit button - planning
+
+
+Stretch Goals
+-------------
+be able to import any Koala CSV
+Filter Views
+Sort Buttons
