@@ -1,0 +1,39 @@
+createdb koallaHollaDB
+
+CREATE TABLE koalas (
+id SERIAL PRIMARY KEY NOT NULL,
+name VARCHAR(22),
+sex VARCHAR(1),
+age INTEGER,
+ready_for_transfer BOOLEAN,
+notes VARCHAR(140)
+);
+
+INSERT INTO koalas VALUES (
+1,
+'Scotty',
+'M',
+4,
+true,
+'Born in Guatemala'
+);
+
+INSERT INTO koalas VALUES (
+2, 'Jean','F',5,true,'Allergic to lots of lava'
+);
+
+INSERT INTO koalas VALUES (
+3,'Ororo','F',7,false,'loves listening to Paula (Abdul)'
+);
+
+INSERT INTO koalas VALUES (
+4, 'Logan','M',15,false,'Love the sauna'
+);
+
+INSERT INTO koalas VALUES (
+5,'Charlie','M',9,true,'Favorite band is Nirvana'
+);
+
+INSERT INTO koalas VALUES (
+6,'Betsy','F',4,true,'Has a pet iguana'
+);
