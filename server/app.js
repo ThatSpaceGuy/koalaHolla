@@ -44,18 +44,25 @@ app.get( '/getKoalas', function( req, res ){
 
 // add koala
 app.post( '/addKoala', urlencodedParser, function( req, res ){
-  console.log( 'addKoala route hit' );
-  //assemble object to send
-  var objectToSend={
-    response: 'from addKoala route'
-  }; //end objectToSend
+  console.log( 'addKoala route hit', req.body );
+  var queryString = 'INSERT INTO koalas (name, sex, age, ready_for_transfer, notes) VALUES (\''+ req.body.name + '\', \'' + req.body.sex + '\', ' + req.body.age + ', ' + req.body.readyForTransfer + ', \'' + req.body.notes + '\')';
+  console.log('sending to database:', queryString);
+  pg.connect(connectionString, function(err, client, done){
+    if (err){
+      console.log(err);
+    }
+    else{
+      client.query(queryString);
+      done();
+    }
+  });
   //send info back to client
-  res.send( objectToSend );
+  res.send( req.body );
 });
 
 // add koala
 app.post( '/editKoala', urlencodedParser, function( req, res ){
-  console.log( 'editKoala route hit' );
+  console.log( 'editKoala route hit', req.body );
   //assemble object to send
   var objectToSend={
     response: 'from editKoala route'
