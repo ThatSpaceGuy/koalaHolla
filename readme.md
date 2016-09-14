@@ -40,3 +40,4 @@ Stretch Goals
 be able to import any Koala CSV
 Filter Views
 Sort Buttons
+Required Fields
