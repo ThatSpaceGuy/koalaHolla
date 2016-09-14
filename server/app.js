@@ -47,7 +47,7 @@ app.get( '/getKoalas', function( req, res ){
 app.post( '/addKoala', urlencodedParser, function( req, res ){
   console.log( 'addKoala route hit', req.body );
   //Build query to add koala to database
-  var queryString = 'INSERT INTO koalas (name, sex, age, ready_for_transfer, notes) VALUES (\''+ req.body.name + '\', \'' + req.body.sex + '\', ' + req.body.age + ', ' + req.body.readyForTransfer + ', \'' + req.body.notes + '\');';
+  var queryString = `INSERT INTO koalas (name, sex, age, ready_for_transfer, notes) VALUES (\'${req.body.name}\', \'${req.body.sex}\', ${req.body.age}, ${req.body.readyForTransfer}, \'${req.body.notes}\');`;
   console.log('sending to database:', queryString);
   //send queryString to database
   pg.connect(connectionString, function(err, client, done){
@@ -74,7 +74,7 @@ app.post( '/addKoala', urlencodedParser, function( req, res ){
 app.post( '/editKoala', urlencodedParser, function( req, res ){
   console.log( 'editKoala route hit', req.body );
   //build query string to edit koala in database, found by id
-  var queryString = 'UPDATE koalas SET name = \''+ req.body.name + '\', sex = \'' + req.body.sex + '\', age = ' + req.body.age + ', ready_for_transfer = ' + req.body.readyForTransfer + ', notes = \'' + req.body.notes + '\' WHERE id = ' + req.body.id + ';';
+  var queryString = `UPDATE koalas SET name = \'${req.body.name}\', sex = \'${req.body.sex}\', age = ${req.body.age}, ready_for_transfer = ${req.body.readyForTransfer}, notes = \'${req.body.notes}\' WHERE id = ${req.body.id};`;
   console.log('sending to database:', queryString);
   //send queryString to database
   pg.connect(connectionString, function(err, client, done){
