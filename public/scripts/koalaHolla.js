@@ -8,6 +8,7 @@ $( document ).ready( function(){
   // add koala button click
   $( '#addButton' ).on( 'click', function(){
     console.log( 'in addButton on click' );
+
     // get user input and put in an object
     var objectToSend = {
       name: $('#nameIn').val(),
@@ -29,9 +30,21 @@ $( document ).ready( function(){
 
 var checkInputs = function(objectToCheck){
   var alertMessage = '';
+  var emptyField = false;
   var nameCheck = objectToCheck.name;
   var notesCheck = objectToCheck.notes;
 
+  // check for empty fields
+  $('.inputField').each(function(index){
+    if ($(this).val() === '') {
+      emptyField = true;
+    }
+  });
+
+  if (emptyField){
+    alertMessage += 'All fields are required!\n';
+  }
+  
   // check name
   if (nameCheck.length > 22) {
     objectToCheck.name = nameCheck.substr(0,21);
