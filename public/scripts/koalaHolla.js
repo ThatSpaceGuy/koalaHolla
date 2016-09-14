@@ -26,6 +26,7 @@ $( document ).ready( function(){
       displayKoala(saveKoala( objectToSend ));
     }
   }); //end addButton on click
+  ///------------------------------------ADD FUNCTION TO EDIT KOALAS
 }); // end doc ready
 
 var checkInputs = function(objectToCheck){
@@ -44,7 +45,7 @@ var checkInputs = function(objectToCheck){
   if (emptyField){
     alertMessage += 'All fields are required!\n';
   }
-  
+
   // check name
   if (nameCheck.length > 22) {
     objectToCheck.name = nameCheck.substr(0,21);
@@ -115,5 +116,4 @@ var saveKoala = function( newKoala ){
 var displayKoala = function(koalaObject){
   console.log('in displayKoalas with:', koalaObject);
   $('#viewKoalas').append('<p>Name: ' + koalaObject.name + ', Age: ' + koalaObject.age + ', Sex: ' + koalaObject.sex + ', Ready For Transfer:' + koalaObject.readyForTransfer + ', Notes: ' + koalaObject.notes + '</p><button class=editButton onclick=editKoala(' + koalaObject.id + ')>Edit</button>');
-
 };
