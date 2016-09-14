@@ -1,4 +1,4 @@
-createdb koallaHollaDB
+createdb koalaHollaDB
 
 CREATE TABLE koalas (
 id SERIAL PRIMARY KEY NOT NULL,
