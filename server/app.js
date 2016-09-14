@@ -30,6 +30,7 @@ app.get( '/getKoalas', function( req, res ){
     }
     else{
       var resultsArray = [];
+      //ask database for all koalas, then send back array of koala objects
       var queryResults = client.query('SELECT * FROM koalas');
       queryResults.on('row', function(row){
         resultsArray.push(row);
@@ -45,26 +46,37 @@ app.get( '/getKoalas', function( req, res ){
 // add koala
 app.post( '/addKoala', urlencodedParser, function( req, res ){
   console.log( 'addKoala route hit', req.body );
+  //Build query to add koala to database
   var queryString = 'INSERT INTO koalas (name, sex, age, ready_for_transfer, notes) VALUES (\''+ req.body.name + '\', \'' + req.body.sex + '\', ' + req.body.age + ', ' + req.body.readyForTransfer + ', \'' + req.body.notes + '\');';
   console.log('sending to database:', queryString);
+  //send queryString to database
   pg.connect(connectionString, function(err, client, done){
     if (err){
       console.log(err);
     }
     else{
       client.query(queryString);
-      done();
+      var queryResult = client.query('SELECT * FROM koalas ORDER BY id DESC LIMIT 1;');
+      var koalaWithId = [];
+      queryResult.on('row', function(row){
+        koalaWithId.push(row);
+      });
+      queryResult.on('end', function(){
+        console.log(koalaWithId);
+        done();
+        return res.json(koalaWithId);
+      })
     }
   });
-  //send info back to client
-  res.send( req.body );
-});
+});//end /addKoala
 
-// add koala
+//edit koala
 app.post( '/editKoala', urlencodedParser, function( req, res ){
   console.log( 'editKoala route hit', req.body );
+  //build query string to edit koala in database, found by id
   var queryString = 'UPDATE koalas SET name = \''+ req.body.name + '\', sex = \'' + req.body.sex + '\', age = ' + req.body.age + ', ready_for_transfer = ' + req.body.readyForTransfer + ', notes = \'' + req.body.notes + '\' WHERE id = ' + req.body.id + ';';
   console.log('sending to database:', queryString);
+  //send queryString to database
   pg.connect(connectionString, function(err, client, done){
     if (err){
       console.log(err);
@@ -76,4 +88,4 @@ app.post( '/editKoala', urlencodedParser, function( req, res ){
   });
   //send info back to client
   res.send( req.body );
-});
+});//end /editKoala

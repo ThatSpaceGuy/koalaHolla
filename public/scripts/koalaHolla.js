@@ -22,7 +22,7 @@ $( document ).ready( function(){
     // call saveKoala with the new obejct
 
     if (objectToSend) {
-      saveKoala( objectToSend );
+      displayKoala(saveKoala( objectToSend ));
     }
   }); //end addButton on click
 }); // end doc ready
@@ -71,26 +71,36 @@ var getKoalas = function(){
     type: 'GET',
     success: function( data ){
       console.log( 'got some koalas: ', data );
+      for (var i = 0; i < data.length; i++) {
+        displayKoala(data[i]);
+      }
     } // end success
   }); //end ajax
   // display on DOM with buttons that allow edit of each
+
 }; // end getKoalas
 
+
+//adds a koala to the database, then returns the same koala object it was given
 var saveKoala = function( newKoala ){
   console.log( 'in saveKoala', newKoala );
   // ajax call to server to get koalas
+  var koalaFromServer;
   $.ajax({
     url: '/addKoala',
     type: 'POST',
     data: newKoala,
     success: function( data ){
-      console.log( 'got some koalas: ', data );
+      console.log( 'saved a koala: ', data[0] );
+      koalaFromServer = data[0];
     } // end success
   }); //end ajax
+  console.log(koalaFromServer);
+  return koalaFromServer;
 };
 
-var displayKoalas = function(koalaObject){
+var displayKoala = function(koalaObject){
   console.log('in displayKoalas with:', koalaObject);
-
+  $('#viewKoalas').append('<p>Name: ' + koalaObject.name + ', Age: ' + koalaObject.age + ', Sex: ' + koalaObject.sex + ', Ready For Transfer:' + koalaObject.readyForTransfer + ', Notes: ' + koalaObject.notes + '</p><button class=editButton onclick=editKoala(' + koalaObject.id + ')>Edit</button>');
 
 };
