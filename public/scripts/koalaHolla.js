@@ -23,10 +23,9 @@ $( document ).ready( function(){
     // call saveKoala with the new obejct
 
     if (objectToSend) {
-      displayKoala(saveKoala( objectToSend ));
+      saveKoala( objectToSend );
     }
   }); //end addButton on click
-  ///------------------------------------ADD FUNCTION TO EDIT KOALAS
 }); // end doc ready
 
 var checkInputs = function(objectToCheck){
@@ -48,7 +47,7 @@ var checkInputs = function(objectToCheck){
 
   // check name
   if (nameCheck.length > 22) {
-    objectToCheck.name = nameCheck.substr(0,21);
+    objectToCheck.name = nameCheck.substr(0,22);
     alertMessage += 'Name entered is too long, please re-enter\n';
     $('#nameIn').val(objectToCheck.name);
   }
@@ -64,7 +63,7 @@ var checkInputs = function(objectToCheck){
   }
   // check notes
   if (notesCheck.length > 140) {
-    objectToCheck.notes = notesCheck.substr(0,139);
+    objectToCheck.notes = notesCheck.substr(0,140);
     alertMessage += 'Notes entered are too long, please re-enter\n';
     $('#notesIn').val(objectToCheck.notes);
   }
@@ -76,6 +75,92 @@ var checkInputs = function(objectToCheck){
   return objectToCheck;
 };
 
+var checkEdits = function(objectToCheck){
+  var alertMessage = '';
+  if (objectToCheck.name){
+    var nameCheck = objectToCheck.name;
+    // check name
+    if (nameCheck.length > 22) {
+      objectToCheck.name = nameCheck.substr(0,22);
+      alertMessage += 'Name entered is too long, please re-enter\n';
+      $('#nameEditIn').val(objectToCheck.name);
+    }
+  }
+  if (objectToCheck.notes){
+    var notesCheck = objectToCheck.notes;
+    // check notes
+    if (notesCheck.length > 140) {
+      objectToCheck.notes = notesCheck.substr(0,140);
+      alertMessage += 'Notes entered are too long, please re-enter\n';
+      $('#notesEditIn').val(objectToCheck.notes);
+    }
+  }
+
+  // check for empty fields
+
+
+  // check age
+  if (objectToCheck.age){
+    objectToCheck.age = Math.floor(objectToCheck.age);
+  }
+
+  // sex value is being controlled by input dropdown
+  // check readyForTransfer
+  if (objectToCheck.readyForTransfer){
+    if (objectToCheck.readyForTransfer === 'Y'){
+      objectToCheck.readyForTransfer = true;
+    } else {
+      objectToCheck.readyForTransfer = false;
+    }
+  }
+
+  if (alertMessage !== ''){
+    return alert(alertMessage);
+  }
+
+  return objectToCheck;
+};
+
+var editKoala = function(id){
+  console.log('in editKoala');
+  var objectToSend = {
+    id: id
+  };
+  if ($('#nameEditIn').val()){
+    objectToSend.name = $('#nameEditIn').val();
+  }
+  if ($('#ageEditIn').val()){
+    objectToSend.age = $('#ageEditIn').val();
+  }
+  if ($('#sexEditIn').val()){
+    objectToSend.sex = $('#sexEditIn').val();
+  }
+  if ($('#readyForTransferEditIn').val()){
+    //matching property name to database column
+    objectToSend.ready_for_transfer = $('#readyForTransferEditIn').val();
+  }
+  if ($('#notesEditIn').val()){
+    objectToSend.notes = $('#notesEditIn').val();
+  }
+  objectToSend = checkEdits(objectToSend);
+  console.log(objectToSend);
+  // call saveKoala with the new obejct
+
+  if (objectToSend) {
+  // ajax call to edit koala
+    $.ajax({
+      url: '/editKoala',
+      type: 'POST',
+      data: objectToSend,
+      success: function(data){
+        console.log('successful edit');
+        //delete old display from DOM and append the updated koala information
+        $('#koala' + data[0].id).remove();
+        displayKoala(data[0]);
+      }//end success
+    });//end ajax call
+  }//end if
+};
 
 var getKoalas = function(){
   console.log( 'in getKoalas' );
@@ -91,7 +176,6 @@ var getKoalas = function(){
     } // end success
   }); //end ajax
   // display on DOM with buttons that allow edit of each
-
 }; // end getKoalas
 
 
@@ -106,14 +190,12 @@ var saveKoala = function( newKoala ){
     data: newKoala,
     success: function( data ){
       console.log( 'saved a koala: ', data[0] );
-      koalaFromServer = data[0];
+      displayKoala(data[0]);
     } // end success
   }); //end ajax
-  console.log(koalaFromServer);
-  return koalaFromServer;
 };
 
 var displayKoala = function(koalaObject){
   console.log('in displayKoalas with:', koalaObject);
-  $('#viewKoalas').append('<p>Name: ' + koalaObject.name + ', Age: ' + koalaObject.age + ', Sex: ' + koalaObject.sex + ', Ready For Transfer:' + koalaObject.readyForTransfer + ', Notes: ' + koalaObject.notes + '</p><button class=editButton onclick=editKoala(' + koalaObject.id + ')>Edit</button>');
+  $('#viewKoalas').append('<div id="koala' + koalaObject.id + '"<p>Name: ' + koalaObject.name + ', Age: ' + koalaObject.age + ', Sex: ' + koalaObject.sex + ', Ready For Transfer: ' + koalaObject.ready_for_transfer + ',  Notes: ' + koalaObject.notes + '</p><button class=editButton onclick=editKoala(' + koalaObject.id + ')>Edit</button></div>');
 };

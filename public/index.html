@@ -30,12 +30,20 @@
     </div>
     <div id='editKoala'>
       <h2>Edit Koala</h2>
-      <input type="text" id="nameEditIn" value="" placeholder="Name">
-      <input type="text" id="ageEditIn" value="" placeholder="Age">
-      <input type="text" id="sexEditIn" value="" placeholder="Sex">
-      <input type="text" id="readyForTransferEditIn" value="" placeholder="Transfer">
-      <input type="text" id="notesEditIn" value="" placeholder="Notes">
-      <button type="button" id="editButton">Edit Koala</button>
+      <input type="text" id="nameEditIn" class="editField" value="" placeholder="Name">
+      <input type="number" id="ageEditIn" class="editField" value="" placeholder="Age">
+      <select id="sexEditIn" class="editField">
+        <option value="">Choose Sex</option>
+        <option value="F">Female</option>
+        <option value="M">Male</option>
+      </select>
+      <select id="readyForTransferEditIn" class="editField">
+        <option value="">Ready For Transfer?</option>
+        <option value="Y">Yes</option>
+        <option value="N">No</option>
+      </select>
+      <input type="text" id="notesEditIn" class="editField" value="" placeholder="Notes">
+      <!-- <button type="button" id="editButton">Edit Koala</button> -->
     </div>
     <div id='viewKoalas'>
       <h2>All Koalas</h2>

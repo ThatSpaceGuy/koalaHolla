@@ -74,7 +74,18 @@ app.post( '/addKoala', urlencodedParser, function( req, res ){
 app.post( '/editKoala', urlencodedParser, function( req, res ){
   console.log( 'editKoala route hit', req.body );
   //build query string to edit koala in database, found by id
-  var queryString = `UPDATE koalas SET name = \'${req.body.name}\', sex = \'${req.body.sex}\', age = ${req.body.age}, ready_for_transfer = ${req.body.readyForTransfer}, notes = \'${req.body.notes}\' WHERE id = ${req.body.id};`;
+  var queryString = `UPDATE koalas SET `
+  for (var prop in req.body) {
+    if (prop == 'id'){
+      //do nothing
+    }
+    else {
+      //will add columnName = 'value', object property names match column names
+      queryString += prop + ` = \'${req.body[prop]}\',`;
+    }
+  }
+  queryString = queryString.substr(0,queryString.length - 1);
+  queryString += ` WHERE id = ${req.body.id};`;
   console.log('sending to database:', queryString);
   //send queryString to database
   pg.connect(connectionString, function(err, client, done){
@@ -83,9 +94,18 @@ app.post( '/editKoala', urlencodedParser, function( req, res ){
     }
     else{
       client.query(queryString);
-      done();
+      var queryResult = client.query(`SELECT * FROM koalas WHERE id = ${req.body.id};`);
+      var koalaWithId = [];
+      queryResult.on('row', function(row){
+        koalaWithId.push(row);
+      });
+      queryResult.on('end', function(){
+        console.log(koalaWithId);
+        done();
+        return res.json(koalaWithId);
+      })
     }
   });
   //send info back to client
-  res.send( req.body );
+  // res.send( req.body );
 });//end /editKoala
